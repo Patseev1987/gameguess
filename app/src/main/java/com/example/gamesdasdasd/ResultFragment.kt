@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.gamesdasdasd.databinding.FragmentResultBinding
 
@@ -17,9 +18,13 @@ class ResultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        _binding = FragmentResultBinding.inflate(inflater,container,false)
+        _binding = FragmentResultBinding.inflate(inflater, container, false)
         val view = binding.root
-        binding.wonLost.text = ResultFragmentArgs.fromBundle(requireArguments()).result
+
+        val viewModelFactory = ResultViewModelFactory(ResultFragmentArgs.fromBundle(requireArguments()).result)
+        val viewModel = ViewModelProvider(this, viewModelFactory)[ResultViewModel::class.java]
+        binding.wonLost.text = viewModel.result
+
         binding.newGameButton.setOnClickListener {
             view.findNavController()
                 .navigate(R.id.action_resultFragment_to_gameFragment)
